@@ -20,21 +20,17 @@ let missionIndex = 0;
 function showPage(id) {
 
   navButtons.forEach(button => {
-
     button.classList.toggle(
       "active",
       button.dataset.page === id
     );
-
   });
 
   pages.forEach(page => {
-
     page.classList.toggle(
       "active",
       page.id === id
     );
-
   });
 
   if (id === "aging") {
@@ -53,7 +49,6 @@ function showPage(id) {
     top: 0,
     behavior: "smooth"
   });
-
 }
 
 
@@ -173,24 +168,13 @@ function commonChartOptions(
 
 function drawAgingChart() {
 
-  const averagePoints =
-    Object.entries(HISTORICAL_AVERAGE)
-
-      .filter(([age]) =>
-        Number(age) >= 20 &&
-        Number(age) <= 33
-      )
-
-      .map(([age, value]) => ({
-        x: Number(age),
-        y: Number(value)
-      }));
-
-
   const curvePoints = [];
 
 
-  /* 정의역 20세 ~ 33세로 제한 */
+  /*
+    에이징 커브 정의역
+    20세 ~ 33세
+  */
 
   for (
     let x = 20;
@@ -234,34 +218,15 @@ function drawAgingChart() {
             {
 
               label:
-                "은퇴 선수 8명 실제 평균",
-
-              data:
-                averagePoints,
-
-              borderColor:
-                "#ffffff",
-
-              backgroundColor:
-                "#ffffff",
-
-              pointRadius: 4,
-
-              borderWidth: 2,
-
-              tension: 0.1
-
-            },
-
-            {
-
-              label:
                 "5차 다항회귀 에이징 커브",
 
               data:
                 curvePoints,
 
               borderColor:
+                "#63adff",
+
+              backgroundColor:
                 "#63adff",
 
               pointRadius: 0,
@@ -314,7 +279,7 @@ function drawAgingChart() {
 
             y: {
 
-              min: 0.6,
+              min: 0.63,
 
               max: 0.76,
 
@@ -1027,12 +992,6 @@ function selectCurrentPlayer(
 
   const curvePoints = [];
 
-
-  /*
-    감독 모드에서도
-    평균 에이징 커브는
-    20~33세 범위만 표시
-  */
 
   for (
     let x = 20;
