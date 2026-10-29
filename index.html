@@ -1,138 +1,508 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
   <title>하키 데이터 매니저</title>
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js">
+  </script>
 </head>
+
+
 <body>
-  <header class="topbar">
-    <div>
-      <h1>하키 데이터 매니저</h1>
-      <p>나이별 득점률 데이터를 보고 선수를 분석하고 영입해보는 웹앱</p>
+
+<header>
+
+  <h1>하키 데이터 매니저</h1>
+
+  <p>
+    나이별 득점률 데이터를 이용해
+    선수의 실력 변화를 분석하고
+    직접 선수를 영입해보는 웹앱
+  </p>
+
+</header>
+
+
+<nav>
+
+  <button
+    class="nav-btn active"
+    data-page="intro">
+
+    소개
+
+  </button>
+
+
+  <button
+    class="nav-btn"
+    data-page="aging">
+
+    에이징 커브
+
+  </button>
+
+
+  <button
+    class="nav-btn"
+    data-page="quiz">
+
+    예측 퀴즈
+
+  </button>
+
+
+  <button
+    class="nav-btn"
+    data-page="coach">
+
+    감독 모드
+
+  </button>
+
+</nav>
+
+
+<main>
+
+
+<!-- 소개 -->
+
+<section
+  id="intro"
+  class="page active">
+
+
+  <div class="hero card">
+
+    <p class="small-title">
+      ICE HOCKEY × DATA
+    </p>
+
+
+    <h2>
+      데이터를 보고
+      선수를 판단해보세요.
+    </h2>
+
+
+    <p>
+
+      은퇴 선수들의 기록을 이용해 만든
+      에이징 커브를 먼저 확인하고,
+
+      과거 선수의 이후 기록을 예측한 뒤
+
+      감독이 되어 현재 선수 중
+      한 명을 직접 영입합니다.
+
+    </p>
+
+
+    <button
+      class="primary go-aging">
+
+      시작하기
+
+    </button>
+
+  </div>
+
+
+  <div class="three-grid">
+
+
+    <div class="card">
+
+      <h3>
+        1. 에이징 커브 학습
+      </h3>
+
+      <p>
+        은퇴 선수 8명의
+        실제 나이별 득점률 평균과
+        5차 다항회귀 그래프를 확인합니다.
+      </p>
+
     </div>
-  </header>
 
-  <nav class="tabs" aria-label="메인 메뉴">
-    <button class="tab active" data-target="home">소개</button>
-    <button class="tab" data-target="learn">에이징 커브</button>
-    <button class="tab" data-target="quiz">예측 퀴즈</button>
-    <button class="tab" data-target="coach">감독 모드</button>
-  </nav>
 
-  <main>
-    <section id="home" class="panel active">
-      <div class="hero card">
-        <div>
-          <span class="eyebrow">ICE HOCKEY × DATA</span>
-          <h2>선수의 이름이 아니라 데이터를 보고 선택해보세요.</h2>
-          <p>
-            먼저 평균 에이징 커브를 학습하고, 과거 선수의 이후 기록을 예측한 뒤,
-            감독이 되어 실제 현역 선수 중 한 명을 영입합니다.
-          </p>
-          <button class="primary" data-go="learn">시작하기</button>
-        </div>
-        <div class="hero-stat">
-          <strong>10</strong>
-          <span>현재 선수 데이터</span>
-          <strong>5차</strong>
-          <span>다항회귀 에이징 커브</span>
-        </div>
+    <div class="card">
+
+      <h3>
+        2. 선수 예측
+      </h3>
+
+      <p>
+        은퇴 선수의 기록 일부만 보고
+        이후 득점률이 어떻게 변할지
+        직접 예상합니다.
+      </p>
+
+    </div>
+
+
+    <div class="card">
+
+      <h3>
+        3. 선수 영입
+      </h3>
+
+      <p>
+        현재 선수 10명의
+        나이와 득점률 변화를 비교해
+        팀 상황에 맞는 선수를 선택합니다.
+      </p>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- 에이징 커브 -->
+
+<section
+  id="aging"
+  class="page">
+
+
+  <div class="section-head">
+
+    <p class="small-title">
+      TUTORIAL
+    </p>
+
+
+    <h2>
+      아이스하키 선수 에이징 커브
+    </h2>
+
+
+    <p>
+
+      은퇴 선수 8명의
+      나이별 득점률 평균과
+
+      5차 다항회귀 분석 결과를
+      함께 확인합니다.
+
+    </p>
+
+  </div>
+
+
+  <div class="card chart-card">
+
+    <canvas id="agingChart"></canvas>
+
+  </div>
+
+
+  <div class="card">
+
+    <h3>
+      5차 다항회귀식
+    </h3>
+
+
+    <div class="formula">
+
+      f(x)=2.35×10⁻⁵x⁵
+      −0.003181x⁴
+      +0.171x³
+      −4.563x²
+      +60.44x
+      −317.2
+
+    </div>
+
+
+    <p>
+
+      이 회귀곡선에서는
+      약 22세 부근에서 큰 극대가 나타나고,
+
+      이후 감소한 뒤
+      28~29세 부근에서
+      다시 작은 극대가 나타납니다.
+
+    </p>
+
+
+    <p>
+
+      이 결과는 모든 아이스하키 선수에게
+      똑같이 적용되는 법칙이 아니라,
+
+      수집한 은퇴 선수들의 데이터에서
+      나타난 평균적인 변화입니다.
+
+    </p>
+
+  </div>
+
+</section>
+
+
+
+<!-- 예측 퀴즈 -->
+
+<section
+  id="quiz"
+  class="page">
+
+
+  <div class="section-head">
+
+    <p class="small-title">
+      PREDICTION QUIZ
+    </p>
+
+
+    <h2>
+      이 선수의 이후 기록은
+      어떻게 변했을까?
+    </h2>
+
+
+    <p>
+
+      은퇴 선수의 그래프 앞부분만 보고
+      이후 득점률 변화를 예상해보세요.
+
+    </p>
+
+  </div>
+
+
+  <div class="two-grid">
+
+
+    <div class="card chart-card">
+
+      <canvas id="quizChart"></canvas>
+
+    </div>
+
+
+    <div class="card controls">
+
+
+      <label for="historicalSelect">
+
+        선수 선택
+
+      </label>
+
+
+      <select id="historicalSelect">
+
+      </select>
+
+
+      <p id="quizQuestion">
+
+      </p>
+
+
+      <div class="choice-grid">
+
+
+        <button
+          class="choice"
+          data-answer="up">
+
+          상승
+
+        </button>
+
+
+        <button
+          class="choice"
+          data-answer="flat">
+
+          비슷
+
+        </button>
+
+
+        <button
+          class="choice"
+          data-answer="down">
+
+          하락
+
+        </button>
+
+
       </div>
 
-      <div class="steps">
-        <article class="card"><b>1</b><h3>학습</h3><p>평균적인 나이별 득점률 변화를 확인합니다.</p></article>
-        <article class="card"><b>2</b><h3>예측</h3><p>과거 선수의 그래프 일부를 보고 이후 기록을 예측합니다.</p></article>
-        <article class="card"><b>3</b><h3>영입</h3><p>팀 상황에 맞는 선수를 직접 선택합니다.</p></article>
-      </div>
-    </section>
 
-    <section id="learn" class="panel">
-      <div class="section-head">
-        <span class="eyebrow">TUTORIAL</span>
-        <h2>아이스하키 선수의 에이징 커브</h2>
-        <p>기존 선수들의 나이별 득점률 평균을 5차 다항함수로 회귀분석한 결과입니다.</p>
-      </div>
+      <button
+        id="revealBtn"
+        class="secondary">
 
-      <div class="card chart-card">
-        <canvas id="agingChart"></canvas>
+        실제 기록 확인
+
+      </button>
+
+
+      <div
+        id="quizResult"
+        class="result hidden">
+
       </div>
 
-      <div class="formula card">
-        <h3>회귀식</h3>
-        <code>f(x)=2.35×10⁻⁵x⁵−0.003181x⁴+0.171x³−4.563x²+60.44x−317.2</code>
-        <p>
-          이 데이터에서는 약 22세 부근에서 가장 높은 극대가 나타나고,
-          이후 감소했다가 28~29세 부근에서 다시 작은 극대가 나타납니다.
-          이는 모든 선수에게 그대로 적용되는 법칙이 아니라, 수집한 데이터에서 나타난 평균적인 패턴입니다.
-        </p>
-      </div>
 
-      <button class="primary" data-go="quiz">예측 퀴즈로 이동</button>
-    </section>
+    </div>
 
-    <section id="quiz" class="panel">
-      <div class="section-head">
-        <span class="eyebrow">PREDICTION QUIZ</span>
-        <h2>이 선수의 이후 득점률은 어떻게 변했을까?</h2>
-        <p>그래프의 앞부분만 보고 이후 흐름을 예측한 뒤 실제 기록을 확인합니다.</p>
-      </div>
+  </div>
 
-      <div class="quiz-layout">
-        <div class="card chart-card">
-          <canvas id="quizChart"></canvas>
-        </div>
-        <div class="card quiz-box">
-          <label for="quizPlayer">선수</label>
-          <select id="quizPlayer"></select>
+</section>
 
-          <p id="quizPrompt" class="prompt"></p>
-          <div class="choices">
-            <button data-choice="up">상승할 것 같다</button>
-            <button data-choice="flat">비슷할 것 같다</button>
-            <button data-choice="down">하락할 것 같다</button>
-          </div>
-          <div id="quizResult" class="result hidden"></div>
-          <button id="revealQuiz" class="secondary">실제 기록 보기</button>
-        </div>
-      </div>
-    </section>
 
-    <section id="coach" class="panel">
-      <div class="section-head">
-        <span class="eyebrow">COACH MODE</span>
-        <h2>감독이 되어 선수를 영입하세요.</h2>
-        <p>미션에 따라 가장 적합하다고 생각하는 선수를 선택하세요. 현역 선수의 미래 값은 실제 기록이 아니라 모델 기반 참고값으로만 사용합니다.</p>
-      </div>
 
-      <div class="card mission">
-        <div>
-          <span class="badge">MISSION</span>
-          <h3 id="missionTitle"></h3>
-          <p id="missionText"></p>
-        </div>
-        <button id="nextMission" class="secondary">다른 미션</button>
-      </div>
+<!-- 감독 모드 -->
 
-      <div id="candidateGrid" class="candidate-grid"></div>
+<section
+  id="coach"
+  class="page">
 
-      <div class="card chart-card">
-        <h3 id="selectedTitle">선수를 선택하면 그래프가 표시됩니다.</h3>
-        <canvas id="playerChart"></canvas>
-      </div>
 
-      <div id="coachResult" class="card result hidden"></div>
-    </section>
-  </main>
+  <div class="section-head">
 
-  <footer>
-    <p>데이터 기반 의사결정 연습용 학생 프로젝트 · 득점률 = Goals per Game</p>
-  </footer>
+    <p class="small-title">
+      COACH MODE
+    </p>
 
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+
+    <h2>
+      감독이 되어
+      선수를 영입하세요.
+    </h2>
+
+
+    <p>
+
+      현재 득점률,
+      나이,
+      최근 기록 변화 등을 분석해
+
+      주어진 팀 상황에
+      가장 적합한 선수를 선택합니다.
+
+    </p>
+
+  </div>
+
+
+  <div class="card mission-card">
+
+
+    <div>
+
+      <span class="badge">
+        MISSION
+      </span>
+
+
+      <h3 id="missionTitle">
+
+      </h3>
+
+
+      <p id="missionDescription">
+
+      </p>
+
+    </div>
+
+
+    <button
+      id="nextMissionBtn"
+      class="secondary">
+
+      다른 미션
+
+    </button>
+
+
+  </div>
+
+
+  <div
+    id="candidateGrid"
+    class="candidate-grid">
+
+  </div>
+
+
+  <div class="card chart-card">
+
+    <h3 id="selectedPlayerTitle">
+
+      선수를 선택하면
+      그래프가 표시됩니다.
+
+    </h3>
+
+
+    <canvas id="currentPlayerChart">
+
+    </canvas>
+
+
+  </div>
+
+
+  <div
+    id="coachResult"
+    class="card result hidden">
+
+  </div>
+
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+  <p>
+
+    득점률 = 경기당 골 수
+    (Goals per Game)
+
+  </p>
+
+</footer>
+
+
+<script src="data.js"></script>
+
+<script src="script.js"></script>
+
+
 </body>
+
 </html>
