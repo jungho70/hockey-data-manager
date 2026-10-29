@@ -4,20 +4,18 @@ const navButtons =
 const pages =
   document.querySelectorAll(".page");
 
-
 let agingChart = null;
-
 let quizChart = null;
-
 let currentPlayerChart = null;
 
 let quizRevealed = false;
-
 let quizChoice = null;
-
 let missionIndex = 0;
 
 
+/* =========================
+   페이지 이동
+========================= */
 
 function showPage(id) {
 
@@ -30,7 +28,6 @@ function showPage(id) {
 
   });
 
-
   pages.forEach(page => {
 
     page.classList.toggle(
@@ -40,27 +37,17 @@ function showPage(id) {
 
   });
 
-
   if (id === "aging") {
-
     drawAgingChart();
-
   }
-
 
   if (id === "quiz") {
-
     setupQuiz();
-
   }
-
 
   if (id === "coach") {
-
     setupMission();
-
   }
-
 
   window.scrollTo({
     top: 0,
@@ -68,7 +55,6 @@ function showPage(id) {
   });
 
 }
-
 
 
 navButtons.forEach(button => {
@@ -81,7 +67,6 @@ navButtons.forEach(button => {
 });
 
 
-
 document
   .querySelector(".go-aging")
   .addEventListener(
@@ -90,28 +75,27 @@ document
   );
 
 
-
-/* 5차 다항회귀식 */
+/* =========================
+   5차 다항회귀식
+========================= */
 
 function agingFunction(x) {
 
   return (
     2.35e-5 * x ** 5
-
     - 0.003181 * x ** 4
-
     + 0.171 * x ** 3
-
     - 4.563 * x ** 2
-
     + 60.44 * x
-
     - 317.2
   );
 
 }
 
 
+/* =========================
+   공통 그래프 설정
+========================= */
 
 function commonChartOptions(
   xTitle,
@@ -146,7 +130,6 @@ function commonChartOptions(
 
       },
 
-
       y: {
 
         title: {
@@ -167,7 +150,6 @@ function commonChartOptions(
 
     },
 
-
     plugins: {
 
       legend: {
@@ -185,7 +167,6 @@ function commonChartOptions(
 }
 
 
-
 /* =========================
    에이징 커브
 ========================= */
@@ -195,25 +176,33 @@ function drawAgingChart() {
   const averagePoints =
     Object.entries(HISTORICAL_AVERAGE)
 
+      .filter(([age]) =>
+        Number(age) >= 20 &&
+        Number(age) <= 33
+      )
+
       .map(([age, value]) => ({
         x: Number(age),
         y: Number(value)
       }));
 
 
-
   const curvePoints = [];
 
 
+  /* 정의역 20세 ~ 33세로 제한 */
+
   for (
-    let x = 18;
-    x <= 39;
+    let x = 20;
+    x <= 33;
     x += 0.1
   ) {
 
     curvePoints.push({
 
-      x: Number(x.toFixed(1)),
+      x: Number(
+        x.toFixed(1)
+      ),
 
       y: agingFunction(x)
 
@@ -222,13 +211,9 @@ function drawAgingChart() {
   }
 
 
-
   if (agingChart) {
-
     agingChart.destroy();
-
   }
-
 
 
   agingChart =
@@ -242,11 +227,9 @@ function drawAgingChart() {
 
         type: "line",
 
-
         data: {
 
           datasets: [
-
 
             {
 
@@ -264,10 +247,11 @@ function drawAgingChart() {
 
               pointRadius: 4,
 
+              borderWidth: 2,
+
               tension: 0.1
 
             },
-
 
             {
 
@@ -292,15 +276,79 @@ function drawAgingChart() {
 
         },
 
-
         options: {
 
-          ...commonChartOptions(
-            "나이 (Age)",
-            "득점률 (Goals per Game)"
-          ),
+          responsive: true,
 
-          parsing: false
+          maintainAspectRatio: false,
+
+          parsing: false,
+
+          scales: {
+
+            x: {
+
+              type: "linear",
+
+              min: 20,
+
+              max: 33,
+
+              title: {
+                display: true,
+                text: "나이 (Age)",
+                color: "#9fb0c4"
+              },
+
+              ticks: {
+                color: "#9fb0c4",
+                stepSize: 1
+              },
+
+              grid: {
+                color:
+                  "rgba(159,176,196,.08)"
+              }
+
+            },
+
+            y: {
+
+              min: 0.6,
+
+              max: 0.76,
+
+              title: {
+                display: true,
+                text:
+                  "득점률 (Goals per Game)",
+                color: "#9fb0c4"
+              },
+
+              ticks: {
+                color: "#9fb0c4"
+              },
+
+              grid: {
+                color:
+                  "rgba(159,176,196,.08)"
+              }
+
+            }
+
+          },
+
+          plugins: {
+
+            legend: {
+
+              labels: {
+                color: "#f4f7fb"
+              }
+
+            }
+
+          }
 
         }
 
@@ -311,7 +359,6 @@ function drawAgingChart() {
 }
 
 
-
 /* =========================
    예측 퀴즈
 ========================= */
@@ -320,7 +367,6 @@ const historicalSelect =
   document.getElementById(
     "historicalSelect"
   );
-
 
 
 function setupQuiz() {
@@ -338,17 +384,13 @@ function setupQuiz() {
             "option"
           );
 
-
         option.value = name;
-
         option.textContent = name;
-
 
         historicalSelect
           .appendChild(option);
 
       });
-
 
 
     historicalSelect
@@ -357,9 +399,7 @@ function setupQuiz() {
         () => {
 
           quizRevealed = false;
-
           quizChoice = null;
-
 
           document
             .getElementById(
@@ -368,7 +408,6 @@ function setupQuiz() {
             .classList
             .add("hidden");
 
-
           drawQuiz();
 
         }
@@ -376,11 +415,9 @@ function setupQuiz() {
 
   }
 
-
   drawQuiz();
 
 }
-
 
 
 function getSortedEntries(object) {
@@ -392,7 +429,6 @@ function getSortedEntries(object) {
       ([age, value]) => [
 
         Number(age),
-
         Number(value)
 
       ]
@@ -404,7 +440,6 @@ function getSortedEntries(object) {
     );
 
 }
-
 
 
 function drawQuiz() {
@@ -445,7 +480,6 @@ function drawQuiz() {
     `${cutAge}세 이후 이 선수의 득점률은 전체적으로 어떻게 변했을까요?`;
 
 
-
   const shown =
     quizRevealed
 
@@ -457,13 +491,9 @@ function drawQuiz() {
       );
 
 
-
   if (quizChart) {
-
     quizChart.destroy();
-
   }
-
 
 
   quizChart =
@@ -476,7 +506,6 @@ function drawQuiz() {
       {
 
         type: "line",
-
 
         data: {
 
@@ -502,6 +531,8 @@ function drawQuiz() {
 
               pointRadius: 4,
 
+              borderWidth: 3,
+
               tension: 0.12
 
             }
@@ -509,7 +540,6 @@ function drawQuiz() {
           ]
 
         },
-
 
         options: {
 
@@ -529,7 +559,6 @@ function drawQuiz() {
 }
 
 
-
 document
   .querySelectorAll(
     ".choice"
@@ -547,9 +576,7 @@ document
         const labels = {
 
           up: "상승",
-
           flat: "비슷",
-
           down: "하락"
 
         };
@@ -563,7 +590,8 @@ document
 
         result.innerHTML =
 
-          `내 예측: <b>${labels[quizChoice]}</b><br>
+          `내 예측:
+          <b>${labels[quizChoice]}</b><br>
           실제 기록을 확인해보세요.`;
 
 
@@ -577,7 +605,6 @@ document
   });
 
 
-
 document
   .getElementById(
     "revealBtn"
@@ -588,9 +615,7 @@ document
 
       quizRevealed = true;
 
-
       drawQuiz();
-
 
 
       const name =
@@ -635,7 +660,6 @@ document
         afterEntries.length;
 
 
-
       let actual =
         "비슷";
 
@@ -662,7 +686,6 @@ document
       }
 
 
-
       const result =
         document.getElementById(
           "quizResult"
@@ -684,13 +707,11 @@ document
   );
 
 
-
 /* =========================
    감독 모드
 ========================= */
 
 const missions = [
-
 
   {
 
@@ -715,7 +736,6 @@ const missions = [
 
   },
 
-
   {
 
     title:
@@ -738,7 +758,6 @@ const missions = [
     }
 
   },
-
 
   {
 
@@ -764,7 +783,6 @@ const missions = [
   }
 
 ];
-
 
 
 function getPlayerStats(name) {
@@ -822,19 +840,13 @@ function getPlayerStats(name) {
 
 
   return {
-
     entries,
-
     age,
-
     current,
-
     trend
-
   };
 
 }
-
 
 
 function setupMission() {
@@ -859,6 +871,21 @@ function setupMission() {
       mission.description;
 
 
+  document
+    .getElementById(
+      "coachResult"
+    )
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById(
+      "selectedPlayerTitle"
+    )
+    .textContent =
+      "선수를 선택하면 그래프가 표시됩니다.";
+
 
   const grid =
     document.getElementById(
@@ -867,7 +894,6 @@ function setupMission() {
 
 
   grid.innerHTML = "";
-
 
 
   mission
@@ -934,7 +960,6 @@ function setupMission() {
 }
 
 
-
 function normalize(
   value,
   min,
@@ -959,7 +984,6 @@ function normalize(
   );
 
 }
-
 
 
 function selectCurrentPlayer(
@@ -988,10 +1012,8 @@ function selectCurrentPlayer(
     );
 
 
-
   const stats =
     getPlayerStats(name);
-
 
 
   document
@@ -1003,13 +1025,18 @@ function selectCurrentPlayer(
     `${name}의 나이별 득점률`;
 
 
-
   const curvePoints = [];
 
 
+  /*
+    감독 모드에서도
+    평균 에이징 커브는
+    20~33세 범위만 표시
+  */
+
   for (
-    let x = 18;
-    x <= 39;
+    let x = 20;
+    x <= 33;
     x += 0.1
   ) {
 
@@ -1028,7 +1055,6 @@ function selectCurrentPlayer(
   }
 
 
-
   if (
     currentPlayerChart
   ) {
@@ -1037,7 +1063,6 @@ function selectCurrentPlayer(
       .destroy();
 
   }
-
 
 
   currentPlayerChart =
@@ -1051,11 +1076,9 @@ function selectCurrentPlayer(
 
         type: "line",
 
-
         data: {
 
           datasets: [
-
 
             {
 
@@ -1083,7 +1106,6 @@ function selectCurrentPlayer(
 
             },
 
-
             {
 
               label:
@@ -1108,7 +1130,6 @@ function selectCurrentPlayer(
 
         },
 
-
         options: {
 
           ...commonChartOptions(
@@ -1123,7 +1144,6 @@ function selectCurrentPlayer(
       }
 
     );
-
 
 
   const mission =
@@ -1148,7 +1168,6 @@ function selectCurrentPlayer(
       );
 
 
-
   const ages =
     all.map(
       item =>
@@ -1168,7 +1187,6 @@ function selectCurrentPlayer(
       item =>
         item.stats.trend
     );
-
 
 
   const minAge =
@@ -1193,7 +1211,6 @@ function selectCurrentPlayer(
 
   const maxTrend =
     Math.max(...trends);
-
 
 
   all.forEach(item => {
@@ -1248,7 +1265,6 @@ function selectCurrentPlayer(
   });
 
 
-
   all.sort(
     (a, b) =>
       b.score - a.score
@@ -1259,26 +1275,54 @@ function selectCurrentPlayer(
     all[0].name;
 
 
-
   const ageCurveValue =
-    agingFunction(
-      stats.age
-    );
+    stats.age >= 20 &&
+    stats.age <= 33
+
+    ? agingFunction(
+        stats.age
+      )
+
+    : null;
 
 
-  const comparison =
+  let comparisonText = "";
 
-    stats.current >=
-    ageCurveValue
 
-    ?
+  if (
+    ageCurveValue !== null
+  ) {
 
-    "평균 에이징 커브보다 높은"
+    const comparison =
 
-    :
+      stats.current >=
+      ageCurveValue
 
-    "평균 에이징 커브보다 낮은";
+      ?
 
+      "평균 에이징 커브보다 높은"
+
+      :
+
+      "평균 에이징 커브보다 낮은";
+
+
+    comparisonText =
+
+      `현재 득점률은
+      같은 나이의
+      ${comparison}
+      수준입니다.`;
+
+  }
+
+  else {
+
+    comparisonText =
+
+      "현재 나이가 평균 에이징 커브의 분석 범위 밖이어서 직접 비교하지 않았습니다.";
+
+  }
 
 
   const result =
@@ -1312,11 +1356,7 @@ function selectCurrentPlayer(
 
 
     <p>
-
-      현재 득점률은
-      ${comparison}
-      수준입니다.
-
+      ${comparisonText}
     </p>
 
 
@@ -1353,7 +1393,6 @@ function selectCurrentPlayer(
     );
 
 }
-
 
 
 document
