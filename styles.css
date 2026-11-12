@@ -1,22 +1,44 @@
 :root {
-  --bg: #07111f;
-  --card: #10243c;
-  --line: #24415f;
-  --text: #f4f7fb;
-  --muted: #9fb0c4;
-  --accent: #63adff;
-  --accent2: #9bd1ff;
+
+  --bg:
+    #07111f;
+
+  --card:
+    #10243c;
+
+  --line:
+    #24415f;
+
+  --text:
+    #f4f7fb;
+
+  --muted:
+    #9fb0c4;
+
+  --accent:
+    #63adff;
+
+  --accent2:
+    #9bd1ff;
+
+  --green:
+    #79d8a4;
+
 }
 
 
 * {
-  box-sizing: border-box;
+
+  box-sizing:
+    border-box;
+
 }
 
 
 body {
 
-  margin: 0;
+  margin:
+    0;
 
   font-family:
     Arial,
@@ -30,16 +52,19 @@ body {
       #09182a
     );
 
-  color: var(--text);
+  color:
+    var(--text);
 
 }
 
 
 header {
 
-  max-width: 1100px;
+  max-width:
+    1100px;
 
-  margin: auto;
+  margin:
+    auto;
 
   padding:
     34px
@@ -51,44 +76,55 @@ header {
 
 header h1 {
 
-  margin: 0;
+  margin:
+    0;
 
-  font-size: 38px;
+  font-size:
+    38px;
 
 }
 
 
 header p {
 
-  color: var(--muted);
+  color:
+    var(--muted);
 
 }
 
 
 nav {
 
-  position: sticky;
+  position:
+    sticky;
 
-  top: 0;
+  top:
+    0;
 
-  z-index: 20;
+  z-index:
+    20;
 
-  display: flex;
+  display:
+    flex;
 
-  justify-content: center;
+  justify-content:
+    center;
 
-  gap: 8px;
+  gap:
+    8px;
 
-  flex-wrap: wrap;
+  flex-wrap:
+    wrap;
 
-  padding: 12px;
+  padding:
+    12px;
 
   background:
     rgba(
       7,
       17,
       31,
-      0.92
+      .94
     );
 
   border-top:
@@ -104,7 +140,8 @@ nav {
 
 .nav-btn {
 
-  border: 0;
+  border:
+    0;
 
   padding:
     10px
@@ -176,7 +213,7 @@ main {
       16,
       36,
       60,
-      0.95
+      .96
     );
 
   border:
@@ -197,7 +234,7 @@ main {
       0,
       0,
       0,
-      0.18
+      .18
     );
 
 }
@@ -213,10 +250,15 @@ main {
     );
 
   max-width:
-    760px;
+    800px;
 
   line-height:
-    1.08;
+    1.1;
+
+  margin:
+    8px
+    0
+    18px;
 
 }
 
@@ -246,7 +288,7 @@ main {
     800;
 
   letter-spacing:
-    0.18em;
+    .18em;
 
 }
 
@@ -295,14 +337,33 @@ main {
 }
 
 
-.three-grid {
+.primary:hover {
+
+  filter:
+    brightness(
+      1.08
+    );
+
+}
+
+
+.secondary:hover,
+.choice:hover {
+
+  background:
+    #214b72;
+
+}
+
+
+.four-grid {
 
   display:
     grid;
 
   grid-template-columns:
     repeat(
-      3,
+      4,
       1fr
     );
 
@@ -388,7 +449,7 @@ main {
 
   grid-template-columns:
     1.6fr
-    0.8fr;
+    .8fr;
 
   gap:
     16px;
@@ -396,7 +457,8 @@ main {
 }
 
 
-.controls label {
+.controls label,
+.compare-controls label {
 
   display:
     block;
@@ -449,10 +511,24 @@ select {
 }
 
 
+.button-row {
+
+  display:
+    flex;
+
+  flex-wrap:
+    wrap;
+
+  gap:
+    8px;
+
+}
+
+
 .hidden {
 
   display:
-    none;
+    none !important;
 
 }
 
@@ -468,7 +544,83 @@ select {
 }
 
 
-.mission-card {
+.compare-controls {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      1fr
+    )
+    auto;
+
+  gap:
+    12px;
+
+  align-items:
+    end;
+
+  margin-bottom:
+    16px;
+
+}
+
+
+.compare-stats {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      1fr
+    );
+
+  gap:
+    14px;
+
+}
+
+
+.player-stat-card h3 {
+
+  margin-top:
+    0;
+
+}
+
+
+.player-stat-card p {
+
+  margin:
+    9px
+    0;
+
+}
+
+
+.gm-top {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:
+    14px;
+
+  margin-bottom:
+    14px;
+
+}
+
+
+.gm-status {
 
   display:
     flex;
@@ -479,8 +631,29 @@ select {
   align-items:
     center;
 
-  gap:
-    18px;
+}
+
+
+.gm-status span {
+
+  color:
+    var(--muted);
+
+}
+
+
+.gm-status strong {
+
+  font-size:
+    28px;
+
+  color:
+    var(--accent2);
+
+}
+
+
+.mission-card {
 
   margin-bottom:
     16px;
@@ -500,7 +673,7 @@ select {
     800;
 
   letter-spacing:
-    0.15em;
+    .15em;
 
 }
 
@@ -549,11 +722,13 @@ select {
   cursor:
     pointer;
 
+  transition:
+    .15s;
+
 }
 
 
-.candidate:hover,
-.candidate.selected {
+.candidate:hover {
 
   border-color:
     var(--accent);
@@ -594,10 +769,40 @@ select {
 }
 
 
-.note {
+.final-result {
+
+  text-align:
+    center;
+
+  padding:
+    40px
+    22px;
+
+}
+
+
+.final-result h2 {
 
   font-size:
-    13px;
+    38px;
+
+}
+
+
+.final-score {
+
+  font-size:
+    58px;
+
+  font-weight:
+    800;
+
+  color:
+    var(--accent2);
+
+  margin:
+    20px
+    0;
 
 }
 
@@ -618,11 +823,28 @@ footer {
 
 @media (
   max-width:
-    760px
+    850px
 ) {
 
-  .three-grid,
-  .two-grid {
+  .four-grid {
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+
+  .compare-controls {
+
+    grid-template-columns:
+      1fr
+      1fr;
+
+  }
+
+
+  .compare-stats {
 
     grid-template-columns:
       1fr;
@@ -638,14 +860,29 @@ footer {
 
   }
 
+}
 
-  .mission-card {
 
-    align-items:
-      flex-start;
+@media (
+  max-width:
+    650px
+) {
 
-    flex-direction:
-      column;
+  .two-grid,
+  .four-grid,
+  .compare-controls,
+  .gm-top {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .candidate-grid {
+
+    grid-template-columns:
+      1fr;
 
   }
 
