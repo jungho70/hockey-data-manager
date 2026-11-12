@@ -40,29 +40,38 @@ function showPage(id) {
 
 
   if (id === "aging") {
+
     drawAgingChart();
+
   }
 
 
   if (id === "quiz") {
 
     if (!currentQuiz) {
+
       makeNextQuiz();
+
     }
 
     renderQuiz(false);
+
   }
 
 
   if (id === "compare") {
+
     setupCompare();
+
   }
 
 
   if (id === "gm") {
 
     if (!gmStarted) {
+
       startGMChallenge();
+
     }
 
   }
@@ -102,10 +111,15 @@ function getSortedEntries(object) {
 
   return Object
     .entries(object)
+
     .map(([age, value]) => [
+
       Number(age),
+
       Number(value)
+
     ])
+
     .sort(
       (a, b) =>
         a[0] - b[0]
@@ -117,12 +131,19 @@ function getSortedEntries(object) {
 function agingFunction(x) {
 
   return (
+
     2.35e-5 * x ** 5
+
     - 0.003181 * x ** 4
+
     + 0.171 * x ** 3
+
     - 4.563 * x ** 2
+
     + 60.44 * x
+
     - 317.2
+
   );
 
 }
@@ -135,29 +156,44 @@ function commonChartOptions(
 
   return {
 
-    responsive: true,
+    responsive:
+      true,
 
-    maintainAspectRatio: false,
+    maintainAspectRatio:
+      false,
 
     scales: {
 
       x: {
 
-        type: "linear",
+        type:
+          "linear",
 
         title: {
-          display: true,
-          text: xTitle,
-          color: "#9fb0c4"
+
+          display:
+            true,
+
+          text:
+            xTitle,
+
+          color:
+            "#9fb0c4"
+
         },
 
         ticks: {
-          color: "#9fb0c4"
+
+          color:
+            "#9fb0c4"
+
         },
 
         grid: {
+
           color:
             "rgba(159,176,196,.08)"
+
         }
 
       },
@@ -166,18 +202,30 @@ function commonChartOptions(
       y: {
 
         title: {
-          display: true,
-          text: yTitle,
-          color: "#9fb0c4"
+
+          display:
+            true,
+
+          text:
+            yTitle,
+
+          color:
+            "#9fb0c4"
+
         },
 
         ticks: {
-          color: "#9fb0c4"
+
+          color:
+            "#9fb0c4"
+
         },
 
         grid: {
+
           color:
             "rgba(159,176,196,.08)"
+
         }
 
       }
@@ -190,7 +238,10 @@ function commonChartOptions(
       legend: {
 
         labels: {
-          color: "#f4f7fb"
+
+          color:
+            "#f4f7fb"
+
         }
 
       }
@@ -208,7 +259,8 @@ function commonChartOptions(
 
 function drawAgingChart() {
 
-  const curvePoints = [];
+  const curvePoints =
+    [];
 
 
   for (
@@ -232,8 +284,12 @@ function drawAgingChart() {
   }
 
 
-  if (agingChart) {
+  if (
+    agingChart
+  ) {
+
     agingChart.destroy();
+
   }
 
 
@@ -246,7 +302,8 @@ function drawAgingChart() {
 
       {
 
-        type: "line",
+        type:
+          "line",
 
         data: {
 
@@ -261,6 +318,9 @@ function drawAgingChart() {
                 curvePoints,
 
               borderColor:
+                "#63adff",
+
+              backgroundColor:
                 "#63adff",
 
               pointRadius:
@@ -281,36 +341,56 @@ function drawAgingChart() {
 
         options: {
 
-          responsive: true,
+          responsive:
+            true,
 
-          maintainAspectRatio: false,
+          maintainAspectRatio:
+            false,
 
-          parsing: false,
+          parsing:
+            false,
 
           scales: {
 
             x: {
 
-              type: "linear",
+              type:
+                "linear",
 
-              min: 20,
+              min:
+                20,
 
-              max: 33,
+              max:
+                33,
 
               title: {
-                display: true,
-                text: "나이 (Age)",
-                color: "#9fb0c4"
+
+                display:
+                  true,
+
+                text:
+                  "나이 (Age)",
+
+                color:
+                  "#9fb0c4"
+
               },
 
               ticks: {
-                color: "#9fb0c4",
-                stepSize: 1
+
+                color:
+                  "#9fb0c4",
+
+                stepSize:
+                  1
+
               },
 
               grid: {
+
                 color:
                   "rgba(159,176,196,.08)"
+
               }
 
             },
@@ -318,24 +398,37 @@ function drawAgingChart() {
 
             y: {
 
-              min: 0.63,
+              min:
+                0.63,
 
-              max: 0.76,
+              max:
+                0.76,
 
               title: {
-                display: true,
+
+                display:
+                  true,
+
                 text:
                   "득점률 (Goals per Game)",
-                color: "#9fb0c4"
+
+                color:
+                  "#9fb0c4"
+
               },
 
               ticks: {
-                color: "#9fb0c4"
+
+                color:
+                  "#9fb0c4"
+
               },
 
               grid: {
+
                 color:
                   "rgba(159,176,196,.08)"
+
               }
 
             }
@@ -348,7 +441,10 @@ function drawAgingChart() {
             legend: {
 
               labels: {
-                color: "#f4f7fb"
+
+                color:
+                  "#f4f7fb"
+
               }
 
             }
@@ -379,6 +475,7 @@ function classifyChange(
   ) {
 
     return "up";
+
   }
 
 
@@ -388,16 +485,19 @@ function classifyChange(
   ) {
 
     return "down";
+
   }
 
 
   return "flat";
+
 }
 
 
 function buildQuizCases() {
 
-  const cases = [];
+  const cases =
+    [];
 
 
   Object
@@ -421,11 +521,15 @@ function buildQuizCases() {
         ) {
 
           const currentAge =
-            entries[cutIndex][0];
+            entries[
+              cutIndex
+            ][0];
 
 
           const currentValue =
-            entries[cutIndex][1];
+            entries[
+              cutIndex
+            ][1];
 
 
           const future =
@@ -492,7 +596,8 @@ function randomItem(array) {
 
   return array[
     Math.floor(
-      Math.random() *
+      Math.random()
+      *
       array.length
     )
   ];
@@ -507,16 +612,21 @@ function makeNextQuiz() {
 
 
   let types =
-    ["up", "flat", "down"];
+    [
+      "up",
+      "flat",
+      "down"
+    ];
 
 
   types =
-    types.filter(type =>
+    types.filter(
+      type =>
 
-      ALL_QUIZ_CASES.some(
-        quiz =>
-          quiz.type === type
-      )
+        ALL_QUIZ_CASES.some(
+          quiz =>
+            quiz.type === type
+        )
 
     );
 
@@ -572,6 +682,21 @@ function makeNextQuiz() {
       "hidden"
     );
 
+
+  document
+    .querySelectorAll(
+      ".choice"
+    )
+    .forEach(
+      button => {
+
+        button.classList.remove(
+          "selected"
+        );
+
+      }
+    );
+
 }
 
 
@@ -584,6 +709,7 @@ function renderQuiz(
   ) {
 
     return;
+
   }
 
 
@@ -648,7 +774,8 @@ function renderQuiz(
 
       {
 
-        type: "line",
+        type:
+          "line",
 
         data: {
 
@@ -712,52 +839,76 @@ document
   .querySelectorAll(
     ".choice"
   )
-  .forEach(button => {
+  .forEach(
+    button => {
 
-    button.addEventListener(
-      "click",
-      () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-        selectedQuizAnswer =
-          button.dataset.answer;
-
-
-        const labels = {
-
-          up:
-            "상승",
-
-          flat:
-            "비슷",
-
-          down:
-            "하락"
-
-        };
+          selectedQuizAnswer =
+            button.dataset.answer;
 
 
-        const result =
           document
-            .getElementById(
-              "quizResult"
+            .querySelectorAll(
+              ".choice"
+            )
+            .forEach(
+              item => {
+
+                item.classList.remove(
+                  "selected"
+                );
+
+              }
             );
 
 
-        result.innerHTML =
-
-          `내 예측:
-          <b>${labels[selectedQuizAnswer]}</b><br>
-          실제 기록을 확인해보세요.`;
+          button.classList.add(
+            "selected"
+          );
 
 
-        result.classList.remove(
-          "hidden"
-        );
+          const labels = {
 
-      }
-    );
+            up:
+              "상승",
 
-  });
+            flat:
+              "비슷",
+
+            down:
+              "하락"
+
+          };
+
+
+          const result =
+            document
+              .getElementById(
+                "quizResult"
+              );
+
+
+          result.innerHTML =
+
+            `내 예측:
+            <b>${labels[selectedQuizAnswer]}</b><br>
+            실제 기록을 확인해보세요.`;
+
+
+          result
+            .classList
+            .remove(
+              "hidden"
+            );
+
+        }
+      );
+
+    }
+  );
 
 
 document
@@ -783,12 +934,15 @@ document
           "먼저 상승, 비슷, 하락 중 하나를 선택해주세요.";
 
 
-        result.classList.remove(
-          "hidden"
-        );
+        result
+          .classList
+          .remove(
+            "hidden"
+          );
 
 
         return;
+
       }
 
 
@@ -851,6 +1005,13 @@ document
         </p>
 
         <p>
+          ${currentQuiz.currentAge}세 득점률:
+          <b>
+            ${currentQuiz.currentValue.toFixed(3)}
+          </b>
+        </p>
+
+        <p>
           이후 3시즌 평균:
           <b>
             ${currentQuiz.futureAverage.toFixed(3)}
@@ -860,9 +1021,11 @@ document
       `;
 
 
-      result.classList.remove(
-        "hidden"
-      );
+      result
+        .classList
+        .remove(
+          "hidden"
+        );
 
     }
   );
@@ -929,6 +1092,7 @@ function fillCompareSelect(
 
     none.textContent =
       "선택 안 함";
+
 
     select.appendChild(
       none
@@ -1012,7 +1176,9 @@ function getPlayerSummary(
 
   const entries =
     getSortedEntries(
-      CURRENT_PLAYERS[name]
+      CURRENT_PLAYERS[
+        name
+      ]
     );
 
 
@@ -1025,17 +1191,25 @@ function getPlayerSummary(
   const peak =
     entries.reduce(
       (best, item) =>
+
         item[1] >
         best[1]
+
         ?
+
         item
+
         :
+
         best
+
     );
 
 
   const recent =
-    entries.slice(-3);
+    entries.slice(
+      -3
+    );
 
 
   let trend =
@@ -2046,9 +2220,11 @@ function chooseGMPlayer(
   `;
 
 
-  feedback.classList.remove(
-    "hidden"
-  );
+  feedback
+    .classList
+    .remove(
+      "hidden"
+    );
 
 
   const next =
@@ -2057,9 +2233,11 @@ function chooseGMPlayer(
     );
 
 
-  next.classList.remove(
-    "hidden"
-  );
+  next
+    .classList
+    .remove(
+      "hidden"
+    );
 
 
   if (
@@ -2197,7 +2375,7 @@ function showGMFinal() {
       "도전형 GM";
 
     message =
-      "데이터 기준과 다른 선택이 많았습니다. 선수 비교실을 활용해 다시 도전해보세요.";
+      "데이터 기준과 다른 선택이 많았습니다. 선수 비교 기능을 활용해 다시 도전해보세요.";
 
   }
 
@@ -2244,9 +2422,11 @@ function showGMFinal() {
   `;
 
 
-  final.classList.remove(
-    "hidden"
-  );
+  final
+    .classList
+    .remove(
+      "hidden"
+    );
 
 
   document
