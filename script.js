@@ -1,11 +1,13 @@
-const navButtons = document.querySelectorAll(".nav-btn");
-const pages = document.querySelectorAll(".page");
+const navButtons =
+  document.querySelectorAll(".nav-btn");
+
+const pages =
+  document.querySelectorAll(".page");
+
 
 let agingChart = null;
 let quizChart = null;
-let currentPlayerChart = null;
-
-let missionIndex = 0;
+let compareChart = null;
 
 let currentQuiz = null;
 let selectedQuizAnswer = null;
@@ -19,41 +21,70 @@ let lastQuizType = null;
 function showPage(id) {
 
   navButtons.forEach(button => {
+
     button.classList.toggle(
       "active",
       button.dataset.page === id
     );
+
   });
 
+
   pages.forEach(page => {
+
     page.classList.toggle(
       "active",
       page.id === id
     );
+
   });
 
+
   if (id === "aging") {
+
     drawAgingChart();
+
   }
+
 
   if (id === "quiz") {
 
     if (!currentQuiz) {
+
       makeNextQuiz();
+
     }
 
     renderQuiz(false);
+
   }
 
-  if (id === "coach") {
-    setupMission();
+
+  if (id === "compare") {
+
+    setupCompare();
+
   }
+
+
+  if (id === "gm") {
+
+    if (!gmStarted) {
+
+      startGMChallenge();
+
+    }
+
+  }
+
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
+
 }
+
 
 
 navButtons.forEach(button => {
@@ -75,23 +106,6 @@ document
 
 
 /* =========================
-   5차 다항회귀식
-========================= */
-
-function agingFunction(x) {
-
-  return (
-    2.35e-5 * x ** 5
-    - 0.003181 * x ** 4
-    + 0.171 * x ** 3
-    - 4.563 * x ** 2
-    + 60.44 * x
-    - 317.2
-  );
-}
-
-
-/* =========================
    공통 함수
 ========================= */
 
@@ -99,11 +113,41 @@ function getSortedEntries(object) {
 
   return Object
     .entries(object)
+
     .map(([age, value]) => [
+
       Number(age),
+
       Number(value)
+
     ])
-    .sort((a, b) => a[0] - b[0]);
+
+    .sort(
+      (a, b) =>
+        a[0] - b[0]
+    );
+
+}
+
+
+function agingFunction(x) {
+
+  return (
+
+    2.35e-5 * x ** 5
+
+    - 0.003181 * x ** 4
+
+    + 0.171 * x ** 3
+
+    - 4.563 * x ** 2
+
+    + 60.44 * x
+
+    - 317.2
+
+  );
+
 }
 
 
@@ -125,47 +169,69 @@ function commonChartOptions(
         type: "linear",
 
         title: {
+
           display: true,
+
           text: xTitle,
+
           color: "#9fb0c4"
+
         },
 
         ticks: {
+
           color: "#9fb0c4"
+
         },
 
         grid: {
-          color: "rgba(159,176,196,.08)"
+
+          color:
+            "rgba(159,176,196,.08)"
+
         }
 
       },
 
+
       y: {
 
         title: {
+
           display: true,
+
           text: yTitle,
+
           color: "#9fb0c4"
+
         },
 
         ticks: {
+
           color: "#9fb0c4"
+
         },
 
         grid: {
-          color: "rgba(159,176,196,.08)"
+
+          color:
+            "rgba(159,176,196,.08)"
+
         }
 
       }
 
     },
 
+
     plugins: {
 
       legend: {
 
         labels: {
+
           color: "#f4f7fb"
+
         }
 
       }
@@ -173,7 +239,9 @@ function commonChartOptions(
     }
 
   };
+
 }
+
 
 
 /* =========================
@@ -193,11 +261,13 @@ function drawAgingChart() {
 
     curvePoints.push({
 
-      x: Number(
-        x.toFixed(1)
-      ),
+      x:
+        Number(
+          x.toFixed(1)
+        ),
 
-      y: agingFunction(x)
+      y:
+        agingFunction(x)
 
     });
 
@@ -205,121 +275,152 @@ function drawAgingChart() {
 
 
   if (agingChart) {
+
     agingChart.destroy();
+
   }
 
 
-  agingChart = new Chart(
+  agingChart =
+    new Chart(
 
-    document.getElementById(
-      "agingChart"
-    ),
+      document.getElementById(
+        "agingChart"
+      ),
 
-    {
+      {
 
-      type: "line",
+        type: "line",
 
-      data: {
+        data: {
 
-        datasets: [
+          datasets: [
 
-          {
+            {
 
-            label:
-              "5차 다항회귀 에이징 커브",
+              label:
+                "5차 다항회귀 에이징 커브",
 
-            data:
-              curvePoints,
+              data:
+                curvePoints,
 
-            borderColor:
-              "#63adff",
+              borderColor:
+                "#63adff",
 
-            backgroundColor:
-              "#63adff",
+              pointRadius:
+                0,
 
-            pointRadius:
-              0,
+              borderWidth:
+                3,
 
-            borderWidth:
-              3,
+              tension:
+                0.18
 
-            tension:
-              0.18
+            }
 
-          }
+          ]
 
-        ]
+        },
 
-      },
 
-      options: {
+        options: {
 
-        responsive: true,
+          responsive: true,
 
-        maintainAspectRatio: false,
+          maintainAspectRatio: false,
 
-        parsing: false,
+          parsing: false,
 
-        scales: {
+          scales: {
 
-          x: {
+            x: {
 
-            type: "linear",
+              type: "linear",
 
-            min: 20,
+              min: 20,
 
-            max: 33,
+              max: 33,
 
-            title: {
-              display: true,
-              text: "나이 (Age)",
-              color: "#9fb0c4"
+              title: {
+
+                display: true,
+
+                text:
+                  "나이 (Age)",
+
+                color:
+                  "#9fb0c4"
+
+              },
+
+              ticks: {
+
+                color:
+                  "#9fb0c4",
+
+                stepSize:
+                  1
+
+              },
+
+              grid: {
+
+                color:
+                  "rgba(159,176,196,.08)"
+
+              }
+
             },
 
-            ticks: {
-              color: "#9fb0c4",
-              stepSize: 1
-            },
 
-            grid: {
-              color:
-                "rgba(159,176,196,.08)"
+            y: {
+
+              min: 0.63,
+
+              max: 0.76,
+
+              title: {
+
+                display: true,
+
+                text:
+                  "득점률 (Goals per Game)",
+
+                color:
+                  "#9fb0c4"
+
+              },
+
+              ticks: {
+
+                color:
+                  "#9fb0c4"
+
+              },
+
+              grid: {
+
+                color:
+                  "rgba(159,176,196,.08)"
+
+              }
+
             }
 
           },
 
-          y: {
 
-            min: 0.63,
+          plugins: {
 
-            max: 0.76,
+            legend: {
 
-            title: {
-              display: true,
-              text:
-                "득점률 (Goals per Game)",
-              color: "#9fb0c4"
-            },
+              labels: {
 
-            ticks: {
-              color: "#9fb0c4"
-            },
+                color:
+                  "#f4f7fb"
 
-            grid: {
-              color:
-                "rgba(159,176,196,.08)"
-            }
+              }
 
-          }
-
-        },
-
-        plugins: {
-
-          legend: {
-
-            labels: {
-              color: "#f4f7fb"
             }
 
           }
@@ -328,24 +429,15 @@ function drawAgingChart() {
 
       }
 
-    }
+    );
 
-  );
 }
+
 
 
 /* =========================
    예측 퀴즈
 ========================= */
-
-
-/*
-  현재 시점과 이후 3시즌 평균 비교
-
-  7% 이상 증가 = 상승
-  7% 이상 감소 = 하락
-  그 사이 = 비슷
-*/
 
 function classifyChange(
   currentValue,
@@ -358,6 +450,7 @@ function classifyChange(
   ) {
 
     return "up";
+
   }
 
 
@@ -367,111 +460,102 @@ function classifyChange(
   ) {
 
     return "down";
+
   }
 
 
   return "flat";
+
 }
 
 
-/*
-  만들 수 있는 모든 문제 생성
-
-  앞 기록 최소 4개,
-  뒤 기록 최소 3개가 있어야 함
-*/
 
 function buildQuizCases() {
 
   const cases = [];
 
 
-  Object.entries(
-    HISTORICAL_PLAYERS
-  ).forEach(
-    ([name, data]) => {
+  Object
+    .entries(
+      HISTORICAL_PLAYERS
+    )
+    .forEach(
+      ([name, data]) => {
 
-      const entries =
-        getSortedEntries(data);
-
-
-      for (
-        let cutIndex = 3;
-        cutIndex <=
-        entries.length - 4;
-        cutIndex++
-      ) {
-
-        const currentAge =
-          entries[cutIndex][0];
-
-
-        const currentValue =
-          entries[cutIndex][1];
-
-
-        const future =
-          entries.slice(
-            cutIndex + 1,
-            cutIndex + 4
+        const entries =
+          getSortedEntries(
+            data
           );
 
 
-        if (
-          future.length !== 3
+        for (
+          let cutIndex = 3;
+          cutIndex <=
+          entries.length - 4;
+          cutIndex++
         ) {
 
-          continue;
+          const currentAge =
+            entries[cutIndex][0];
+
+
+          const currentValue =
+            entries[cutIndex][1];
+
+
+          const future =
+            entries.slice(
+              cutIndex + 1,
+              cutIndex + 4
+            );
+
+
+          const futureAverage =
+
+            future.reduce(
+              (sum, item) =>
+                sum + item[1],
+              0
+            )
+
+            /
+
+            3;
+
+
+          const type =
+            classifyChange(
+              currentValue,
+              futureAverage
+            );
+
+
+          cases.push({
+
+            name,
+
+            entries,
+
+            cutIndex,
+
+            currentAge,
+
+            currentValue,
+
+            futureAverage,
+
+            type
+
+          });
+
         }
 
-
-        const futureAverage =
-
-          future.reduce(
-            (sum, item) =>
-              sum + item[1],
-            0
-          )
-
-          /
-
-          3;
-
-
-        const type =
-          classifyChange(
-            currentValue,
-            futureAverage
-          );
-
-
-        cases.push({
-
-          name,
-
-          entries,
-
-          cutIndex,
-
-          currentAge,
-
-          currentValue,
-
-          future,
-
-          futureAverage,
-
-          type
-
-        });
-
       }
-
-    }
-  );
+    );
 
 
   return cases;
+
 }
 
 
@@ -483,38 +567,28 @@ function randomItem(array) {
 
   return array[
     Math.floor(
-      Math.random() *
+      Math.random()
+      *
       array.length
     )
   ];
+
 }
 
 
-/*
-  새 문제 생성
-
-  상승 / 비슷 / 하락 중
-  직전과 다른 유형을 우선 선택
-*/
 
 function makeNextQuiz() {
 
-  selectedQuizAnswer = null;
+  selectedQuizAnswer =
+    null;
 
 
-  let availableTypes = [
-    "up",
-    "flat",
-    "down"
-  ];
+  let types =
+    ["up", "flat", "down"];
 
 
-  /*
-    실제 존재하는 정답 유형만 사용
-  */
-
-  availableTypes =
-    availableTypes.filter(type =>
+  types =
+    types.filter(type =>
 
       ALL_QUIZ_CASES.some(
         quiz =>
@@ -524,37 +598,33 @@ function makeNextQuiz() {
     );
 
 
-  /*
-    직전과 같은 정답은
-    가능하면 제외
-  */
-
-  const differentTypes =
-    availableTypes.filter(
+  const different =
+    types.filter(
       type =>
-        type !== lastQuizType
+        type !==
+        lastQuizType
     );
 
 
   if (
-    differentTypes.length > 0
+    different.length > 0
   ) {
 
-    availableTypes =
-      differentTypes;
+    types =
+      different;
+
   }
 
 
-  const chosenType =
-    randomItem(
-      availableTypes
-    );
+  const targetType =
+    randomItem(types);
 
 
   const candidates =
     ALL_QUIZ_CASES.filter(
       quiz =>
-        quiz.type === chosenType
+        quiz.type ===
+        targetType
     );
 
 
@@ -566,20 +636,31 @@ function makeNextQuiz() {
 
   lastQuizType =
     currentQuiz.type;
+
+
+  document
+    .getElementById(
+      "quizResult"
+    )
+    .classList
+    .add(
+      "hidden"
+    );
+
 }
 
 
-/*
-  문제 화면 표시
-*/
 
 function renderQuiz(
   revealFuture = false
 ) {
 
-  if (!currentQuiz) {
+  if (
+    !currentQuiz
+  ) {
 
     return;
+
   }
 
 
@@ -600,14 +681,14 @@ function renderQuiz(
     `${currentQuiz.currentAge}세까지의 기록입니다. 이후 3시즌의 득점률은 어떻게 변할까요?`;
 
 
-  let shownEntries;
+  let shown;
 
 
   if (
     revealFuture
   ) {
 
-    shownEntries =
+    shown =
       currentQuiz.entries.slice(
         0,
         currentQuiz.cutIndex + 4
@@ -617,7 +698,7 @@ function renderQuiz(
 
   else {
 
-    shownEntries =
+    shown =
       currentQuiz.entries.slice(
         0,
         currentQuiz.cutIndex + 1
@@ -631,6 +712,7 @@ function renderQuiz(
   ) {
 
     quizChart.destroy();
+
   }
 
 
@@ -655,7 +737,7 @@ function renderQuiz(
                 currentQuiz.name,
 
               data:
-                shownEntries.map(
+                shown.map(
                   ([x, y]) => ({
                     x,
                     y
@@ -683,6 +765,7 @@ function renderQuiz(
 
         },
 
+
         options: {
 
           ...commonChartOptions(
@@ -698,12 +781,10 @@ function renderQuiz(
       }
 
     );
+
 }
 
 
-/*
-  상승 / 비슷 / 하락 선택
-*/
 
 document
   .querySelectorAll(
@@ -719,39 +800,25 @@ document
           button.dataset.answer;
 
 
-        document
-          .querySelectorAll(
-            ".choice"
-          )
-          .forEach(item => {
-
-            item.classList.remove(
-              "selected"
-            );
-
-          });
-
-
-        button.classList.add(
-          "selected"
-        );
-
-
         const labels = {
 
-          up: "상승",
+          up:
+            "상승",
 
-          flat: "비슷",
+          flat:
+            "비슷",
 
-          down: "하락"
+          down:
+            "하락"
 
         };
 
 
         const result =
-          document.getElementById(
-            "quizResult"
-          );
+          document
+            .getElementById(
+              "quizResult"
+            );
 
 
         result.innerHTML =
@@ -771,9 +838,6 @@ document
   });
 
 
-/*
-  실제 기록 확인
-*/
 
 document
   .getElementById(
@@ -783,20 +847,15 @@ document
     "click",
     () => {
 
-      if (!currentQuiz) {
-
-        return;
-      }
-
-
       if (
         !selectedQuizAnswer
       ) {
 
         const result =
-          document.getElementById(
-            "quizResult"
-          );
+          document
+            .getElementById(
+              "quizResult"
+            );
 
 
         result.textContent =
@@ -809,6 +868,7 @@ document
 
 
         return;
+
       }
 
 
@@ -817,11 +877,14 @@ document
 
       const labels = {
 
-        up: "상승",
+        up:
+          "상승",
 
-        flat: "비슷",
+        flat:
+          "비슷",
 
-        down: "하락"
+        down:
+          "하락"
 
       };
 
@@ -833,9 +896,10 @@ document
 
 
       const result =
-        document.getElementById(
-          "quizResult"
-        );
+        document
+          .getElementById(
+            "quizResult"
+          );
 
 
       result.innerHTML = `
@@ -865,14 +929,7 @@ document
         </p>
 
         <p>
-          ${currentQuiz.currentAge}세 득점률:
-          <b>
-            ${currentQuiz.currentValue.toFixed(3)}
-          </b>
-        </p>
-
-        <p>
-          이후 3시즌 평균 득점률:
+          이후 3시즌 평균:
           <b>
             ${currentQuiz.futureAverage.toFixed(3)}
           </b>
@@ -889,9 +946,6 @@ document
   );
 
 
-/*
-  다음 문제
-*/
 
 document
   .getElementById(
@@ -903,143 +957,139 @@ document
 
       makeNextQuiz();
 
-
-      document
-        .getElementById(
-          "quizResult"
-        )
-        .classList.add(
-          "hidden"
-        );
-
-
-      document
-        .querySelectorAll(
-          ".choice"
-        )
-        .forEach(item => {
-
-          item.classList.remove(
-            "selected"
-          );
-
-        });
-
-
       renderQuiz(false);
 
     }
   );
 
 
+
 /* =========================
-   감독 모드
+   선수 비교
 ========================= */
 
-const missions = [
+const compareSelect1 =
+  document.getElementById(
+    "comparePlayer1"
+  );
 
-  {
+const compareSelect2 =
+  document.getElementById(
+    "comparePlayer2"
+  );
 
-    title:
-      "장기 리빌딩",
-
-    description:
-      "향후 5년 이상 팀의 핵심이 될 공격수를 영입하세요. 현재 득점률뿐 아니라 나이와 성장 가능성도 중요합니다.",
-
-    candidates: [
-
-      "Macklin Celebrini",
-
-      "Connor Bedard",
-
-      "Leo Carlsson",
-
-      "Wyatt Johnston"
-
-    ],
-
-    weights: {
-
-      current: 0.35,
-
-      trend: 0.35,
-
-      youth: 0.30
-
-    }
-
-  },
+const compareSelect3 =
+  document.getElementById(
+    "comparePlayer3"
+  );
 
 
-  {
-
-    title:
-      "지금 우승해야 한다",
-
-    description:
-      "이번 시즌 우승이 목표입니다. 미래 성장성보다 현재 득점력을 우선해 선수를 선택하세요.",
-
-    candidates: [
-
-      "Connor McDavid",
-
-      "Nathan MacKinnon",
-
-      "Leon Draisaitl",
-
-      "Auston Matthews"
-
-    ],
-
-    weights: {
-
-      current: 0.80,
-
-      trend: 0.15,
-
-      youth: 0.05
-
-    }
-
-  },
+let compareReady =
+  false;
 
 
-  {
 
-    title:
-      "균형 잡힌 3년 계약",
+function fillCompareSelect(
+  select,
+  includeNone = false
+) {
 
-    description:
-      "현재 득점력과 앞으로의 위험을 함께 고려해 3년 동안 안정적으로 기여할 선수를 선택하세요.",
+  if (
+    includeNone
+  ) {
 
-    candidates: [
+    const none =
+      document.createElement(
+        "option"
+      );
 
-      "Jack Hughes",
+    none.value =
+      "";
 
-      "Auston Matthews",
+    none.textContent =
+      "선택 안 함";
 
-      "Connor McDavid",
-
-      "Nikita Kucherov"
-
-    ],
-
-    weights: {
-
-      current: 0.55,
-
-      trend: 0.25,
-
-      youth: 0.20
-
-    }
+    select.appendChild(
+      none
+    );
 
   }
 
-];
+
+  Object
+    .keys(
+      CURRENT_PLAYERS
+    )
+    .forEach(name => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
 
 
-function getPlayerStats(name) {
+      option.value =
+        name;
+
+      option.textContent =
+        name;
+
+
+      select.appendChild(
+        option
+      );
+
+    });
+
+}
+
+
+
+function setupCompare() {
+
+  if (
+    !compareReady
+  ) {
+
+    fillCompareSelect(
+      compareSelect1
+    );
+
+    fillCompareSelect(
+      compareSelect2
+    );
+
+    fillCompareSelect(
+      compareSelect3,
+      true
+    );
+
+
+    compareSelect1.value =
+      "Connor McDavid";
+
+    compareSelect2.value =
+      "Auston Matthews";
+
+    compareSelect3.value =
+      "Connor Bedard";
+
+
+    compareReady =
+      true;
+
+  }
+
+
+  drawComparison();
+
+}
+
+
+
+function getPlayerSummary(
+  name
+) {
 
   const entries =
     getSortedEntries(
@@ -1053,19 +1103,24 @@ function getPlayerStats(name) {
     ];
 
 
-  const age =
-    latest[0];
-
-
-  const current =
-    latest[1];
+  const peak =
+    entries.reduce(
+      (best, item) =>
+        item[1] >
+        best[1]
+        ?
+        item
+        :
+        best
+    );
 
 
   const recent =
     entries.slice(-3);
 
 
-  let trend = 0;
+  let trend =
+    0;
 
 
   if (
@@ -1097,41 +1152,647 @@ function getPlayerStats(name) {
 
     entries,
 
-    age,
+    age:
+      latest[0],
 
-    current,
+    current:
+      latest[1],
+
+    peakAge:
+      peak[0],
+
+    peakValue:
+      peak[1],
 
     trend
 
   };
+
 }
 
 
-function setupMission() {
 
-  const mission =
-    missions[missionIndex];
+function drawComparison() {
+
+  const names = [
+
+    compareSelect1.value,
+
+    compareSelect2.value,
+
+    compareSelect3.value
+
+  ]
+  .filter(
+    name =>
+      name !== ""
+  );
+
+
+  const uniqueNames =
+    [...new Set(names)];
+
+
+  if (
+    compareChart
+  ) {
+
+    compareChart.destroy();
+
+  }
+
+
+  const colors = [
+
+    "#63adff",
+
+    "#f5b85b",
+
+    "#79d8a4"
+
+  ];
+
+
+  const datasets =
+    uniqueNames.map(
+      (name, index) => {
+
+        const summary =
+          getPlayerSummary(
+            name
+          );
+
+
+        return {
+
+          label:
+            name,
+
+          data:
+            summary.entries.map(
+              ([x, y]) => ({
+                x,
+                y
+              })
+            ),
+
+          borderColor:
+            colors[index],
+
+          backgroundColor:
+            colors[index],
+
+          pointRadius:
+            4,
+
+          borderWidth:
+            3,
+
+          tension:
+            0.12
+
+        };
+
+      }
+    );
+
+
+  compareChart =
+    new Chart(
+
+      document.getElementById(
+        "compareChart"
+      ),
+
+      {
+
+        type:
+          "line",
+
+        data: {
+          datasets
+        },
+
+        options: {
+
+          ...commonChartOptions(
+            "나이",
+            "득점률"
+          ),
+
+          parsing:
+            false
+
+        }
+
+      }
+
+    );
+
+
+  const stats =
+    document.getElementById(
+      "compareStats"
+    );
+
+
+  stats.innerHTML =
+    "";
+
+
+  uniqueNames.forEach(
+    name => {
+
+      const player =
+        getPlayerSummary(
+          name
+        );
+
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "card player-stat-card";
+
+
+      card.innerHTML = `
+
+        <h3>
+          ${name}
+        </h3>
+
+        <p>
+          현재 나이
+          <b>
+            ${player.age}세
+          </b>
+        </p>
+
+        <p>
+          최근 득점률
+          <b>
+            ${player.current.toFixed(3)}
+          </b>
+        </p>
+
+        <p>
+          개인 최고 득점률
+          <b>
+            ${player.peakValue.toFixed(3)}
+          </b>
+        </p>
+
+        <p>
+          최고 기록 나이
+          <b>
+            ${player.peakAge}세
+          </b>
+        </p>
+
+        <p>
+          최근 추세
+          <b>
+            ${
+              player.trend >= 0
+              ?
+              "+"
+              :
+              ""
+            }
+            ${player.trend.toFixed(3)}
+            /년
+          </b>
+        </p>
+
+      `;
+
+
+      stats.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+
+document
+  .getElementById(
+    "compareBtn"
+  )
+  .addEventListener(
+    "click",
+    drawComparison
+  );
+
+
+
+/* =========================
+   GM 챌린지
+========================= */
+
+const gmMissions = [
+
+  {
+
+    title:
+      "장기 리빌딩",
+
+    description:
+      "향후 5년 이상 팀의 중심이 될 젊은 공격수를 영입하세요.",
+
+    candidates: [
+
+      "Macklin Celebrini",
+
+      "Connor Bedard",
+
+      "Leo Carlsson",
+
+      "Wyatt Johnston"
+
+    ],
+
+    weights: {
+
+      current:
+        0.30,
+
+      trend:
+        0.35,
+
+      youth:
+        0.35
+
+    }
+
+  },
+
+
+  {
+
+    title:
+      "이번 시즌 우승",
+
+    description:
+      "미래보다 당장의 득점력이 중요합니다. 지금 가장 강한 선수를 선택하세요.",
+
+    candidates: [
+
+      "Connor McDavid",
+
+      "Nathan MacKinnon",
+
+      "Leon Draisaitl",
+
+      "Auston Matthews"
+
+    ],
+
+    weights: {
+
+      current:
+        0.80,
+
+      trend:
+        0.15,
+
+      youth:
+        0.05
+
+    }
+
+  },
+
+
+  {
+
+    title:
+      "안정적인 3년 계약",
+
+    description:
+      "현재 기록과 나이, 최근 흐름을 균형 있게 고려하세요.",
+
+    candidates: [
+
+      "Jack Hughes",
+
+      "Auston Matthews",
+
+      "Connor McDavid",
+
+      "Nikita Kucherov"
+
+    ],
+
+    weights: {
+
+      current:
+        0.50,
+
+      trend:
+        0.25,
+
+      youth:
+        0.25
+
+    }
+
+  },
+
+
+  {
+
+    title:
+      "성장 가능성 투자",
+
+    description:
+      "현재 기록보다 앞으로 더 성장할 가능성이 높은 선수를 선택하세요.",
+
+    candidates: [
+
+      "Connor Bedard",
+
+      "Leo Carlsson",
+
+      "Wyatt Johnston",
+
+      "Jack Hughes"
+
+    ],
+
+    weights: {
+
+      current:
+        0.20,
+
+      trend:
+        0.45,
+
+      youth:
+        0.35
+
+    }
+
+  },
+
+
+  {
+
+    title:
+      "최종 에이스 선정",
+
+    description:
+      "현재 실력과 나이, 최근 흐름을 종합해 팀의 최종 에이스를 선택하세요.",
+
+    candidates: [
+
+      "Connor McDavid",
+
+      "Nathan MacKinnon",
+
+      "Auston Matthews",
+
+      "Jack Hughes"
+
+    ],
+
+    weights: {
+
+      current:
+        0.55,
+
+      trend:
+        0.25,
+
+      youth:
+        0.20
+
+    }
+
+  }
+
+];
+
+
+let gmStarted =
+  false;
+
+let gmRound =
+  0;
+
+let gmScore =
+  0;
+
+let gmAnswered =
+  false;
+
+let gmCorrectCount =
+  0;
+
+
+
+function normalize(
+  value,
+  min,
+  max
+) {
+
+  if (
+    max === min
+  ) {
+
+    return 0.5;
+
+  }
+
+
+  return (
+
+    (value - min)
+
+    /
+
+    (max - min)
+
+  );
+
+}
+
+
+
+function scoreMission(
+  mission
+) {
+
+  const players =
+    mission.candidates.map(
+      name => {
+
+        const data =
+          getPlayerSummary(
+            name
+          );
+
+
+        return {
+
+          name,
+
+          ...data
+
+        };
+
+      }
+    );
+
+
+  const ages =
+    players.map(
+      player =>
+        player.age
+    );
+
+
+  const currents =
+    players.map(
+      player =>
+        player.current
+    );
+
+
+  const trends =
+    players.map(
+      player =>
+        player.trend
+    );
+
+
+  const minAge =
+    Math.min(...ages);
+
+  const maxAge =
+    Math.max(...ages);
+
+  const minCurrent =
+    Math.min(
+      ...currents
+    );
+
+  const maxCurrent =
+    Math.max(
+      ...currents
+    );
+
+  const minTrend =
+    Math.min(
+      ...trends
+    );
+
+  const maxTrend =
+    Math.max(
+      ...trends
+    );
+
+
+  players.forEach(
+    player => {
+
+      const youth =
+        1 -
+        normalize(
+          player.age,
+          minAge,
+          maxAge
+        );
+
+
+      const current =
+        normalize(
+          player.current,
+          minCurrent,
+          maxCurrent
+        );
+
+
+      const trend =
+        normalize(
+          player.trend,
+          minTrend,
+          maxTrend
+        );
+
+
+      player.score =
+
+        mission.weights.current
+        *
+        current
+
+        +
+
+        mission.weights.trend
+        *
+        trend
+
+        +
+
+        mission.weights.youth
+        *
+        youth;
+
+    }
+  );
+
+
+  players.sort(
+    (a, b) =>
+      b.score -
+      a.score
+  );
+
+
+  return players;
+
+}
+
+
+
+function startGMChallenge() {
+
+  gmStarted =
+    true;
+
+  gmRound =
+    0;
+
+  gmScore =
+    0;
+
+  gmCorrectCount =
+    0;
+
+  loadGMRound();
+
+}
+
+
+
+function loadGMRound() {
+
+  gmAnswered =
+    false;
 
 
   document
     .getElementById(
-      "missionTitle"
-    )
-    .textContent =
-      mission.title;
-
-
-  document
-    .getElementById(
-      "missionDescription"
-    )
-    .textContent =
-      mission.description;
-
-
-  document
-    .getElementById(
-      "coachResult"
+      "gmFeedback"
     )
     .classList.add(
       "hidden"
@@ -1140,27 +1801,79 @@ function setupMission() {
 
   document
     .getElementById(
-      "selectedPlayerTitle"
+      "gmNextBtn"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "gmFinal"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  const mission =
+    gmMissions[
+      gmRound
+    ];
+
+
+  document
+    .getElementById(
+      "gmRound"
     )
     .textContent =
-      "선수를 선택하면 그래프가 표시됩니다.";
+
+    `${gmRound + 1} / ${gmMissions.length}`;
+
+
+  document
+    .getElementById(
+      "gmScore"
+    )
+    .textContent =
+      gmScore;
+
+
+  document
+    .getElementById(
+      "gmMissionTitle"
+    )
+    .textContent =
+      mission.title;
+
+
+  document
+    .getElementById(
+      "gmMissionDescription"
+    )
+    .textContent =
+      mission.description;
 
 
   const grid =
     document.getElementById(
-      "candidateGrid"
+      "gmCandidateGrid"
     );
 
 
-  grid.innerHTML = "";
+  grid.innerHTML =
+    "";
 
 
   mission
     .candidates
     .forEach(name => {
 
-      const stats =
-        getPlayerStats(name);
+      const player =
+        getPlayerSummary(
+          name
+        );
 
 
       const button =
@@ -1180,19 +1893,25 @@ function setupMission() {
         </strong>
 
         <span>
-          현재 나이:
-          ${stats.age}세
+          나이:
+          ${player.age}세
         </span>
 
         <span>
           최근 득점률:
-          ${stats.current.toFixed(3)}
+          ${player.current.toFixed(3)}
         </span>
 
         <span>
           최근 추세:
-          ${stats.trend >= 0 ? "+" : ""}
-          ${stats.trend.toFixed(3)}/년
+          ${
+            player.trend >= 0
+            ?
+            "+"
+            :
+            ""
+          }
+          ${player.trend.toFixed(3)}
         </span>
 
       `;
@@ -1201,9 +1920,8 @@ function setupMission() {
       button.addEventListener(
         "click",
         () =>
-          selectCurrentPlayer(
-            name,
-            button
+          chooseGMPlayer(
+            name
           )
       );
 
@@ -1217,485 +1935,368 @@ function setupMission() {
 }
 
 
-function normalize(
-  value,
-  min,
-  max
+
+function chooseGMPlayer(
+  name
 ) {
 
   if (
-    max === min
+    gmAnswered
   ) {
 
-    return 0.5;
-  }
-
-
-  return (
-
-    (value - min)
-
-    /
-
-    (max - min)
-
-  );
-}
-
-
-function selectCurrentPlayer(
-  name,
-  button
-) {
-
-  document
-    .querySelectorAll(
-      ".candidate"
-    )
-    .forEach(item => {
-
-      item.classList.remove(
-        "selected"
-      );
-
-    });
-
-
-  button.classList.add(
-    "selected"
-  );
-
-
-  const stats =
-    getPlayerStats(name);
-
-
-  document
-    .getElementById(
-      "selectedPlayerTitle"
-    )
-    .textContent =
-
-    `${name}의 나이별 득점률`;
-
-
-  const curvePoints = [];
-
-
-  for (
-    let x = 20;
-    x <= 33;
-    x += 0.1
-  ) {
-
-    curvePoints.push({
-
-      x:
-        Number(
-          x.toFixed(1)
-        ),
-
-      y:
-        agingFunction(x)
-
-    });
+    return;
 
   }
 
 
-  if (
-    currentPlayerChart
-  ) {
-
-    currentPlayerChart.destroy();
-  }
-
-
-  currentPlayerChart =
-    new Chart(
-
-      document.getElementById(
-        "currentPlayerChart"
-      ),
-
-      {
-
-        type:
-          "line",
-
-        data: {
-
-          datasets: [
-
-            {
-
-              label:
-                name,
-
-              data:
-                stats.entries.map(
-                  ([x, y]) => ({
-                    x,
-                    y
-                  })
-                ),
-
-              borderColor:
-                "#9bd1ff",
-
-              backgroundColor:
-                "#9bd1ff",
-
-              pointRadius:
-                4,
-
-              borderWidth:
-                3,
-
-              tension:
-                0.12
-
-            },
-
-
-            {
-
-              label:
-                "평균 에이징 커브",
-
-              data:
-                curvePoints,
-
-              borderColor:
-                "rgba(255,255,255,.4)",
-
-              pointRadius:
-                0,
-
-              borderDash:
-                [6, 6],
-
-              tension:
-                0.18
-
-            }
-
-          ]
-
-        },
-
-
-        options: {
-
-          ...commonChartOptions(
-            "나이",
-            "득점률"
-          ),
-
-          parsing:
-            false
-
-        }
-
-      }
-
-    );
+  gmAnswered =
+    true;
 
 
   const mission =
-    missions[
-      missionIndex
+    gmMissions[
+      gmRound
     ];
 
 
-  const all =
-    mission
-      .candidates
-      .map(
-        candidate => ({
-
-          name:
-            candidate,
-
-          stats:
-            getPlayerStats(
-              candidate
-            )
-
-        })
-      );
-
-
-  const ages =
-    all.map(
-      item =>
-        item.stats.age
+  const ranking =
+    scoreMission(
+      mission
     );
 
 
-  const currents =
-    all.map(
-      item =>
-        item.stats.current
+  const best =
+    ranking[0];
+
+
+  const selected =
+    ranking.find(
+      player =>
+        player.name === name
     );
 
 
-  const trends =
-    all.map(
-      item =>
-        item.stats.trend
-    );
+  const ratio =
+    selected.score
+    /
+    best.score;
 
 
-  const minAge =
-    Math.min(
-      ...ages
-    );
-
-
-  const maxAge =
-    Math.max(
-      ...ages
-    );
-
-
-  const minCurrent =
-    Math.min(
-      ...currents
-    );
-
-
-  const maxCurrent =
-    Math.max(
-      ...currents
-    );
-
-
-  const minTrend =
-    Math.min(
-      ...trends
-    );
-
-
-  const maxTrend =
-    Math.max(
-      ...trends
-    );
-
-
-  all.forEach(item => {
-
-    const youthScore =
-
-      1 -
-
-      normalize(
-
-        item.stats.age,
-
-        minAge,
-
-        maxAge
-
-      );
-
-
-    const currentScore =
-
-      normalize(
-
-        item.stats.current,
-
-        minCurrent,
-
-        maxCurrent
-
-      );
-
-
-    const trendScore =
-
-      normalize(
-
-        item.stats.trend,
-
-        minTrend,
-
-        maxTrend
-
-      );
-
-
-    item.score =
-
-      mission.weights.current
-      *
-      currentScore
-
-      +
-
-      mission.weights.trend
-      *
-      trendScore
-
-      +
-
-      mission.weights.youth
-      *
-      youthScore;
-
-  });
-
-
-  all.sort(
-    (a, b) =>
-      b.score - a.score
-  );
-
-
-  const recommended =
-    all[0].name;
-
-
-  const ageCurveValue =
-
-    stats.age >= 20 &&
-    stats.age <= 33
-
-    ?
-
-    agingFunction(
-      stats.age
-    )
-
-    :
-
-    null;
-
-
-  let comparisonText;
+  let gainedScore;
 
 
   if (
-    ageCurveValue !== null
+    name ===
+    best.name
   ) {
 
-    const comparison =
+    gainedScore =
+      100;
 
-      stats.current >=
-      ageCurveValue
+    gmCorrectCount++;
 
-      ?
+  }
 
-      "평균 에이징 커브보다 높은"
+  else if (
+    ratio >=
+    0.85
+  ) {
 
-      :
+    gainedScore =
+      70;
 
-      "평균 에이징 커브보다 낮은";
+  }
 
+  else if (
+    ratio >=
+    0.70
+  ) {
 
-    comparisonText =
-
-      `현재 득점률은 같은 나이의 ${comparison} 수준입니다.`;
+    gainedScore =
+      40;
 
   }
 
   else {
 
-    comparisonText =
-
-      "현재 나이가 평균 에이징 커브의 분석 범위 밖이어서 직접 비교하지 않았습니다.";
+    gainedScore =
+      20;
 
   }
 
 
-  const result =
+  gmScore +=
+    gainedScore;
+
+
+  document
+    .getElementById(
+      "gmScore"
+    )
+    .textContent =
+      gmScore;
+
+
+  const feedback =
     document.getElementById(
-      "coachResult"
+      "gmFeedback"
     );
 
 
-  result.innerHTML = `
+  feedback.innerHTML = `
 
     <h3>
-      ${name} 선택
+      ${name} 영입
     </h3>
 
     <p>
-
-      현재 나이
-      <b>${stats.age}세</b>,
-
-      최근 득점률
-      <b>${stats.current.toFixed(3)} G/GP</b>,
-
-      최근 추세
+      이번 라운드 획득 점수:
       <b>
-        ${stats.trend >= 0 ? "+" : ""}
-        ${stats.trend.toFixed(3)}/년
+        +${gainedScore}
       </b>
-
     </p>
-
 
     <p>
-      ${comparisonText}
+      데이터 기준 가장 높은 평가:
+      <b>
+        ${best.name}
+      </b>
     </p>
-
 
     <p>
-
-      <b>
-        이 미션의 데이터 점수 기준 추천 선수:
-        ${recommended}
-      </b>
-
-    </p>
-
-
-    <p class="note">
-
-      이 결과는
-      현재 득점률,
-      최근 변화,
-      나이를 이용한
-      게임용 판단입니다.
-
-      실제 미래 성적을
-      의미하지 않습니다.
-
+      이 평가는 해당 미션에서
+      현재 득점률, 최근 변화 추세,
+      나이에 서로 다른 가중치를 적용해 계산한 결과입니다.
     </p>
 
   `;
 
 
-  result.classList.remove(
+  feedback.classList.remove(
     "hidden"
   );
+
+
+  const next =
+    document.getElementById(
+      "gmNextBtn"
+    );
+
+
+  next.classList.remove(
+    "hidden"
+  );
+
+
+  if (
+    gmRound ===
+    gmMissions.length - 1
+  ) {
+
+    next.textContent =
+      "최종 결과 보기";
+
+  }
+
+  else {
+
+    next.textContent =
+      "다음 라운드";
+
+  }
 
 }
 
 
+
 document
   .getElementById(
-    "nextMissionBtn"
+    "gmNextBtn"
   )
   .addEventListener(
     "click",
     () => {
 
-      missionIndex =
+      if (
+        gmRound <
+        gmMissions.length - 1
+      ) {
 
-        (
-          missionIndex + 1
-        )
+        gmRound++;
 
-        %
+        loadGMRound();
 
-        missions.length;
+      }
 
+      else {
 
-      setupMission();
+        showGMFinal();
+
+      }
 
     }
   );
+
+
+
+function showGMFinal() {
+
+  document
+    .getElementById(
+      "gmMissionCard"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "gmCandidateGrid"
+    )
+    .innerHTML =
+      "";
+
+
+  document
+    .getElementById(
+      "gmFeedback"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "gmNextBtn"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  let title;
+  let message;
+
+
+  if (
+    gmScore >=
+    450
+  ) {
+
+    title =
+      "데이터 분석형 GM";
+
+    message =
+      "현재 기록과 성장 가능성을 매우 잘 분석했습니다.";
+
+  }
+
+  else if (
+    gmScore >=
+    350
+  ) {
+
+    title =
+      "균형형 GM";
+
+    message =
+      "현재 실력과 미래 가능성을 비교적 균형 있게 판단했습니다.";
+
+  }
+
+  else if (
+    gmScore >=
+    250
+  ) {
+
+    title =
+      "직감형 GM";
+
+    message =
+      "몇몇 선택은 데이터 기준과 달랐지만 자신만의 판단 기준이 있었습니다.";
+
+  }
+
+  else {
+
+    title =
+      "도전형 GM";
+
+    message =
+      "데이터 기준과 다른 선택이 많았습니다. 선수 비교실을 활용해 다시 도전해보세요.";
+
+  }
+
+
+  const final =
+    document.getElementById(
+      "gmFinal"
+    );
+
+
+  final.innerHTML = `
+
+    <p class="small-title">
+      FINAL RESULT
+    </p>
+
+    <h2>
+      ${title}
+    </h2>
+
+    <div class="final-score">
+      ${gmScore} / 500
+    </div>
+
+    <p>
+      ${message}
+    </p>
+
+    <p>
+      데이터 기준 최고 선택과 일치:
+      <b>
+        ${gmCorrectCount} / 5
+      </b>
+    </p>
+
+    <button
+      id="restartGMBtn"
+      class="primary">
+
+      다시 도전하기
+
+    </button>
+
+  `;
+
+
+  final.classList.remove(
+    "hidden"
+  );
+
+
+  document
+    .getElementById(
+      "restartGMBtn"
+    )
+    .addEventListener(
+      "click",
+      () => {
+
+        document
+          .getElementById(
+            "gmMissionCard"
+          )
+          .classList.remove(
+            "hidden"
+          );
+
+
+        startGMChallenge();
+
+      }
+    );
+
+}
