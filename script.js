@@ -4,7 +4,6 @@ const navButtons =
 const pages =
   document.querySelectorAll(".page");
 
-
 let agingChart = null;
 let quizChart = null;
 let compareChart = null;
@@ -41,38 +40,29 @@ function showPage(id) {
 
 
   if (id === "aging") {
-
     drawAgingChart();
-
   }
 
 
   if (id === "quiz") {
 
     if (!currentQuiz) {
-
       makeNextQuiz();
-
     }
 
     renderQuiz(false);
-
   }
 
 
   if (id === "compare") {
-
     setupCompare();
-
   }
 
 
   if (id === "gm") {
 
     if (!gmStarted) {
-
       startGMChallenge();
-
     }
 
   }
@@ -84,7 +74,6 @@ function showPage(id) {
   });
 
 }
-
 
 
 navButtons.forEach(button => {
@@ -113,15 +102,10 @@ function getSortedEntries(object) {
 
   return Object
     .entries(object)
-
     .map(([age, value]) => [
-
       Number(age),
-
       Number(value)
-
     ])
-
     .sort(
       (a, b) =>
         a[0] - b[0]
@@ -133,19 +117,12 @@ function getSortedEntries(object) {
 function agingFunction(x) {
 
   return (
-
     2.35e-5 * x ** 5
-
     - 0.003181 * x ** 4
-
     + 0.171 * x ** 3
-
     - 4.563 * x ** 2
-
     + 60.44 * x
-
     - 317.2
-
   );
 
 }
@@ -169,26 +146,18 @@ function commonChartOptions(
         type: "linear",
 
         title: {
-
           display: true,
-
           text: xTitle,
-
           color: "#9fb0c4"
-
         },
 
         ticks: {
-
           color: "#9fb0c4"
-
         },
 
         grid: {
-
           color:
             "rgba(159,176,196,.08)"
-
         }
 
       },
@@ -197,26 +166,18 @@ function commonChartOptions(
       y: {
 
         title: {
-
           display: true,
-
           text: yTitle,
-
           color: "#9fb0c4"
-
         },
 
         ticks: {
-
           color: "#9fb0c4"
-
         },
 
         grid: {
-
           color:
             "rgba(159,176,196,.08)"
-
         }
 
       }
@@ -229,9 +190,7 @@ function commonChartOptions(
       legend: {
 
         labels: {
-
           color: "#f4f7fb"
-
         }
 
       }
@@ -241,7 +200,6 @@ function commonChartOptions(
   };
 
 }
-
 
 
 /* =========================
@@ -275,9 +233,7 @@ function drawAgingChart() {
 
 
   if (agingChart) {
-
     agingChart.destroy();
-
   }
 
 
@@ -342,32 +298,19 @@ function drawAgingChart() {
               max: 33,
 
               title: {
-
                 display: true,
-
-                text:
-                  "나이 (Age)",
-
-                color:
-                  "#9fb0c4"
-
+                text: "나이 (Age)",
+                color: "#9fb0c4"
               },
 
               ticks: {
-
-                color:
-                  "#9fb0c4",
-
-                stepSize:
-                  1
-
+                color: "#9fb0c4",
+                stepSize: 1
               },
 
               grid: {
-
                 color:
                   "rgba(159,176,196,.08)"
-
               }
 
             },
@@ -380,29 +323,19 @@ function drawAgingChart() {
               max: 0.76,
 
               title: {
-
                 display: true,
-
                 text:
                   "득점률 (Goals per Game)",
-
-                color:
-                  "#9fb0c4"
-
+                color: "#9fb0c4"
               },
 
               ticks: {
-
-                color:
-                  "#9fb0c4"
-
+                color: "#9fb0c4"
               },
 
               grid: {
-
                 color:
                   "rgba(159,176,196,.08)"
-
               }
 
             }
@@ -415,10 +348,7 @@ function drawAgingChart() {
             legend: {
 
               labels: {
-
-                color:
-                  "#f4f7fb"
-
+                color: "#f4f7fb"
               }
 
             }
@@ -432,7 +362,6 @@ function drawAgingChart() {
     );
 
 }
-
 
 
 /* =========================
@@ -450,7 +379,6 @@ function classifyChange(
   ) {
 
     return "up";
-
   }
 
 
@@ -460,14 +388,11 @@ function classifyChange(
   ) {
 
     return "down";
-
   }
 
 
   return "flat";
-
 }
-
 
 
 function buildQuizCases() {
@@ -567,14 +492,12 @@ function randomItem(array) {
 
   return array[
     Math.floor(
-      Math.random()
-      *
+      Math.random() *
       array.length
     )
   ];
 
 }
-
 
 
 function makeNextQuiz() {
@@ -617,7 +540,9 @@ function makeNextQuiz() {
 
 
   const targetType =
-    randomItem(types);
+    randomItem(
+      types
+    );
 
 
   const candidates =
@@ -650,7 +575,6 @@ function makeNextQuiz() {
 }
 
 
-
 function renderQuiz(
   revealFuture = false
 ) {
@@ -660,7 +584,6 @@ function renderQuiz(
   ) {
 
     return;
-
   }
 
 
@@ -785,7 +708,6 @@ function renderQuiz(
 }
 
 
-
 document
   .querySelectorAll(
     ".choice"
@@ -838,7 +760,6 @@ document
   });
 
 
-
 document
   .getElementById(
     "revealBtn"
@@ -868,11 +789,12 @@ document
 
 
         return;
-
       }
 
 
-      renderQuiz(true);
+      renderQuiz(
+        true
+      );
 
 
       const labels = {
@@ -946,7 +868,6 @@ document
   );
 
 
-
 document
   .getElementById(
     "nextQuizBtn"
@@ -957,11 +878,12 @@ document
 
       makeNextQuiz();
 
-      renderQuiz(false);
+      renderQuiz(
+        false
+      );
 
     }
   );
-
 
 
 /* =========================
@@ -986,7 +908,6 @@ const compareSelect3 =
 
 let compareReady =
   false;
-
 
 
 function fillCompareSelect(
@@ -1044,7 +965,6 @@ function fillCompareSelect(
 }
 
 
-
 function setupCompare() {
 
   if (
@@ -1084,7 +1004,6 @@ function setupCompare() {
   drawComparison();
 
 }
-
 
 
 function getPlayerSummary(
@@ -1169,7 +1088,6 @@ function getPlayerSummary(
   };
 
 }
-
 
 
 function drawComparison() {
@@ -1381,7 +1299,6 @@ function drawComparison() {
 }
 
 
-
 document
   .getElementById(
     "compareBtn"
@@ -1391,6 +1308,58 @@ document
     drawComparison
   );
 
+
+/* =========================
+   GM 점수 설명
+========================= */
+
+document
+  .getElementById(
+    "gmInfoBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      const info =
+        document.getElementById(
+          "gmInfo"
+        );
+
+
+      info.classList.toggle(
+        "hidden"
+      );
+
+
+      if (
+        info.classList.contains(
+          "hidden"
+        )
+      ) {
+
+        document
+          .getElementById(
+            "gmInfoBtn"
+          )
+          .textContent =
+            "점수 계산 방법 보기";
+
+      }
+
+      else {
+
+        document
+          .getElementById(
+            "gmInfoBtn"
+          )
+          .textContent =
+            "점수 계산 방법 닫기";
+
+      }
+
+    }
+  );
 
 
 /* =========================
@@ -1410,11 +1379,8 @@ const gmMissions = [
     candidates: [
 
       "Macklin Celebrini",
-
       "Connor Bedard",
-
       "Leo Carlsson",
-
       "Wyatt Johnston"
 
     ],
@@ -1446,11 +1412,8 @@ const gmMissions = [
     candidates: [
 
       "Connor McDavid",
-
       "Nathan MacKinnon",
-
       "Leon Draisaitl",
-
       "Auston Matthews"
 
     ],
@@ -1482,11 +1445,8 @@ const gmMissions = [
     candidates: [
 
       "Jack Hughes",
-
       "Auston Matthews",
-
       "Connor McDavid",
-
       "Nikita Kucherov"
 
     ],
@@ -1518,11 +1478,8 @@ const gmMissions = [
     candidates: [
 
       "Connor Bedard",
-
       "Leo Carlsson",
-
       "Wyatt Johnston",
-
       "Jack Hughes"
 
     ],
@@ -1554,11 +1511,8 @@ const gmMissions = [
     candidates: [
 
       "Connor McDavid",
-
       "Nathan MacKinnon",
-
       "Auston Matthews",
-
       "Jack Hughes"
 
     ],
@@ -1597,7 +1551,6 @@ let gmCorrectCount =
   0;
 
 
-
 function normalize(
   value,
   min,
@@ -1624,7 +1577,6 @@ function normalize(
   );
 
 }
-
 
 
 function scoreMission(
@@ -1675,10 +1627,14 @@ function scoreMission(
 
 
   const minAge =
-    Math.min(...ages);
+    Math.min(
+      ...ages
+    );
 
   const maxAge =
-    Math.max(...ages);
+    Math.max(
+      ...ages
+    );
 
   const minCurrent =
     Math.min(
@@ -1763,7 +1719,6 @@ function scoreMission(
 }
 
 
-
 function startGMChallenge() {
 
   gmStarted =
@@ -1778,10 +1733,19 @@ function startGMChallenge() {
   gmCorrectCount =
     0;
 
+
+  document
+    .getElementById(
+      "gmMissionCard"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+
   loadGMRound();
 
 }
-
 
 
 function loadGMRound() {
@@ -1854,6 +1818,15 @@ function loadGMRound() {
     )
     .textContent =
       mission.description;
+
+
+  document
+    .getElementById(
+      "gmWeightInfo"
+    )
+    .textContent =
+
+    `평가 비중 · 현재 득점률 ${Math.round(mission.weights.current * 100)}% · 최근 추세 ${Math.round(mission.weights.trend * 100)}% · 나이 ${Math.round(mission.weights.youth * 100)}%`;
 
 
   const grid =
@@ -1933,7 +1906,6 @@ function loadGMRound() {
     });
 
 }
-
 
 
 function chooseGMPlayer(
@@ -2057,16 +2029,18 @@ function chooseGMPlayer(
     </p>
 
     <p>
-      데이터 기준 가장 높은 평가:
+      데이터 기준 1위:
       <b>
         ${best.name}
       </b>
     </p>
 
     <p>
-      이 평가는 해당 미션에서
-      현재 득점률, 최근 변화 추세,
-      나이에 서로 다른 가중치를 적용해 계산한 결과입니다.
+      이번 미션에서는
+      현재 득점률 ${Math.round(mission.weights.current * 100)}%,
+      최근 변화 추세 ${Math.round(mission.weights.trend * 100)}%,
+      나이 ${Math.round(mission.weights.youth * 100)}%를
+      반영했습니다.
     </p>
 
   `;
@@ -2108,7 +2082,6 @@ function chooseGMPlayer(
 }
 
 
-
 document
   .getElementById(
     "gmNextBtn"
@@ -2136,7 +2109,6 @@ document
 
     }
   );
-
 
 
 function showGMFinal() {
@@ -2202,7 +2174,7 @@ function showGMFinal() {
       "균형형 GM";
 
     message =
-      "현재 실력과 미래 가능성을 비교적 균형 있게 판단했습니다.";
+      "현재 실력과 미래 가능성을 균형 있게 판단했습니다.";
 
   }
 
@@ -2215,7 +2187,7 @@ function showGMFinal() {
       "직감형 GM";
 
     message =
-      "몇몇 선택은 데이터 기준과 달랐지만 자신만의 판단 기준이 있었습니다.";
+      "일부 선택은 데이터 기준과 달랐지만 자신만의 판단 기준이 있었습니다.";
 
   }
 
@@ -2255,7 +2227,7 @@ function showGMFinal() {
     </p>
 
     <p>
-      데이터 기준 최고 선택과 일치:
+      데이터 기준 1위 선택 횟수:
       <b>
         ${gmCorrectCount} / 5
       </b>
@@ -2284,15 +2256,6 @@ function showGMFinal() {
     .addEventListener(
       "click",
       () => {
-
-        document
-          .getElementById(
-            "gmMissionCard"
-          )
-          .classList.remove(
-            "hidden"
-          );
-
 
         startGMChallenge();
 
